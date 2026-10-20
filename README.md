@@ -2,7 +2,8 @@
 
 [![Laravel 13](https://img.shields.io/badge/Laravel-13.x-red.svg)](https://laravel.com)
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3+-blue.svg)](https://php.net)
-[![Tests Passing](https://img.shields.io/badge/Tests-31%20Passed-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-34%20Passed%20(128%20assertions)-brightgreen.svg)]()
+[![Postman Documentation](https://img.shields.io/badge/Postman-Interactive%20Docs-FF6C37.svg?logo=postman&logoColor=white)](https://documenter.getpostman.com/view/42596767/2sBYHSzgRG)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An enterprise-grade, clean-architecture RESTful API for Order and Payment Management built with **Laravel 13**, **JWT Authentication**, and an **Extensible Payment Gateway Strategy Pattern**.
@@ -193,22 +194,28 @@ Run the full PHPUnit / Pest test suite:
 php artisan test
 ```
 
-### Test Coverage Highlights (31 Tests, 108 Assertions):
+### Test Coverage Highlights (34 Tests, 128 Assertions):
 - **`AuthTest`**: User registration, login, token refresh, profile inspection, JWT rejection.
-- **`OrderTest`**: Creation with items calculation, status filtering, cache write-through validation, deletion constraints.
-- **`PaymentTest`**: Credit card, PayPal, Stripe processing, failure simulation, idempotency duplicates prevention.
+- **`OrderTest`**: Creation with items calculation, comprehensive request validation, status filtering, cache write-through validation, deletion constraints.
+- **`PaymentTest`**: Credit card, PayPal, Stripe processing, failure simulation, idempotency duplicates prevention, request enum validation.
 - **`PaymentGatewayStrategyTest`**: Gateway manager resolution, dynamic extensions, exception handling.
 
 ---
 
-## 📬 Postman API Collection
+## 📬 Postman API Collection & Live Documentation
 
-A complete Postman collection is exported and located at:
-`docs/postman_collection.json`
+### 🌐 Live Interactive Documentation:
+Access the complete, interactive API documentation online directly in your browser:  
+👉 **[View Published Postman Documentation](https://documenter.getpostman.com/view/42596767/2sBYHSzgRG)**
 
-### To Import:
+### 📥 Local Collection File:
+A complete collection export is also provided in the repository for offline use:
+- `postman_collection.json`
+- `docs/postman_collection.json`
+
+#### To Import:
 1. Open Postman.
-2. Click **Import** -> Select `docs/postman_collection.json`.
+2. Click **Import** -> Select `postman_collection.json`.
 3. The collection includes pre-configured environment variables and auto-updating JWT auth tokens upon login/registration.
 
 ### Main Endpoints Summary:
