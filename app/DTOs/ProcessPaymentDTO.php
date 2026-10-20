@@ -2,14 +2,25 @@
 
 namespace App\DTOs;
 
-readonly class ProcessPaymentDTO
+use Spatie\LaravelData\Attributes\MapInputName;
+use Spatie\LaravelData\Data;
+
+class ProcessPaymentDTO extends Data
 {
     public function __construct(
+        #[MapInputName('order_id')]
         public int $orderId,
+
+        #[MapInputName('payment_method')]
         public string $paymentMethod,
+
         public float $amount,
+
         public string $currency = 'USD',
+
+        #[MapInputName('idempotency_key')]
         public ?string $idempotencyKey = null,
+
         public array $gatewayPayload = [],
     ) {}
 

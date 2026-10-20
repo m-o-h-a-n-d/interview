@@ -80,6 +80,50 @@ class OrderTest extends TestCase
             ->assertJsonValidationErrors(['items']);
     }
 
+    public function test_order_creation_validates_customer_fields_and_item_constraints(): void
+    {
+        $auth = $this->authenticateUser();
+
+        $payload = [
+            'customer_name' => 'A', // min 2
+            'customer_email' => 'not-an-email',
+            'items' => [
+                [
+                    'product_name' => '',
+                    'quantity' => 0, // min 1
+                    'unit_price' => -10, // min 0.01
+                ],
+            ],
+        ];
+
+        $response = $this->postJson(route('orders.store'), $payload, $auth['headers']);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'customer_name',
+                'customer_email',
+                'items.0.product_name',
+                'items.0.quantity',
+                'items.0.unit_price',
+            ]);
+    }
+
+    public function test_order_update_validates_status_enum_and_types(): void
+    {
+        $auth = $this->authenticateUser();
+        $order = Order::factory()->create(['user_id' => $auth['user']->id]);
+
+        $invalidPayload = [
+            'status' => 'invalid_status_value',
+            'customer_email' => 'invalid-email-address',
+        ];
+
+        $response = $this->putJson(route('orders.update', $order->id), $invalidPayload, $auth['headers']);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['status', 'customer_email']);
+    }
+
     public function test_user_can_view_orders_and_filter_by_status(): void
     {
         $auth = $this->authenticateUser();

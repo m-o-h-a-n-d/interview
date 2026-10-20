@@ -45,13 +45,16 @@ class OrderRepository implements OrderRepositoryInterface
 
             $totalAmount = 0.0;
             foreach ($itemsData as $item) {
-                $subtotal = round($item['quantity'] * $item['unit_price'], 2);
+                $productName = (string) ($item['product_name'] ?? $item['productName'] ?? '');
+                $quantity = (int) ($item['quantity'] ?? 1);
+                $unitPrice = (float) ($item['unit_price'] ?? $item['unitPrice'] ?? 0.0);
+                $subtotal = round($quantity * $unitPrice, 2);
                 $totalAmount += $subtotal;
 
                 $order->items()->create([
-                    'product_name' => $item['product_name'],
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['unit_price'],
+                    'product_name' => $productName,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
                     'subtotal' => $subtotal,
                 ]);
             }
@@ -72,13 +75,16 @@ class OrderRepository implements OrderRepositoryInterface
 
                 $totalAmount = 0.0;
                 foreach ($itemsData as $item) {
-                    $subtotal = round($item['quantity'] * $item['unit_price'], 2);
+                    $productName = (string) ($item['product_name'] ?? $item['productName'] ?? '');
+                    $quantity = (int) ($item['quantity'] ?? 1);
+                    $unitPrice = (float) ($item['unit_price'] ?? $item['unitPrice'] ?? 0.0);
+                    $subtotal = round($quantity * $unitPrice, 2);
                     $totalAmount += $subtotal;
 
                     $order->items()->create([
-                        'product_name' => $item['product_name'],
-                        'quantity' => $item['quantity'],
-                        'unit_price' => $item['unit_price'],
+                        'product_name' => $productName,
+                        'quantity' => $quantity,
+                        'unit_price' => $unitPrice,
                         'subtotal' => $subtotal,
                     ]);
                 }

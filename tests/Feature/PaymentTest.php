@@ -39,6 +39,26 @@ class PaymentTest extends TestCase
         $this->assertDatabaseCount('payments', 0);
     }
 
+    public function test_payment_creation_validates_required_fields_and_method_enum(): void
+    {
+        $auth = $this->authenticateUser();
+
+        // 1. Missing fields
+        $response = $this->postJson(route('payments.store'), [], $auth['headers']);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['order_id', 'payment_method']);
+
+        // 2. Invalid payment method enum and non-existing order
+        $response2 = $this->postJson(route('payments.store'), [
+            'order_id' => 999999,
+            'payment_method' => 'unsupported_fake_gateway',
+            'amount' => -50,
+        ], $auth['headers']);
+
+        $response2->assertStatus(422)
+            ->assertJsonValidationErrors(['order_id', 'payment_method', 'amount']);
+    }
+
     public function test_payment_fails_if_order_is_cancelled(): void
     {
         $auth = $this->authenticateUser();

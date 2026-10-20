@@ -3,8 +3,9 @@
 namespace App\DTOs;
 
 use App\Enums\PaymentStatus;
+use Spatie\LaravelData\Data;
 
-readonly class PaymentResultDTO
+class PaymentResultDTO extends Data
 {
     public function __construct(
         public bool $isSuccess,

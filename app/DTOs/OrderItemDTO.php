@@ -2,14 +2,18 @@
 
 namespace App\DTOs;
 
-readonly class OrderItemDTO
+use Spatie\LaravelData\Data;
+
+class OrderItemDTO extends Data
 {
     public function __construct(
         public string $productName,
         public int $quantity,
         public float $unitPrice,
         public ?float $subtotal = null,
-    ) {}
+    ) {
+        $this->subtotal ??= round($this->quantity * $this->unitPrice, 2);
+    }
 
     public function getCalculatedSubtotal(): float
     {
@@ -18,14 +22,15 @@ readonly class OrderItemDTO
 
     public static function fromArray(array $data): self
     {
-        $quantity = (int) $data['quantity'];
-        $unitPrice = (float) $data['unit_price'];
+        $quantity = (int) ($data['quantity'] ?? 1);
+        $unitPrice = (float) ($data['unit_price'] ?? $data['unitPrice'] ?? 0.0);
+        $subtotal = isset($data['subtotal']) ? (float) $data['subtotal'] : round($quantity * $unitPrice, 2);
 
         return new self(
-            productName: (string) $data['product_name'],
+            productName: (string) ($data['product_name'] ?? $data['productName'] ?? ''),
             quantity: $quantity,
             unitPrice: $unitPrice,
-            subtotal: isset($data['subtotal']) ? (float) $data['subtotal'] : round($quantity * $unitPrice, 2),
+            subtotal: $subtotal,
         );
     }
 

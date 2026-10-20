@@ -74,7 +74,10 @@ class OrderService
             'notes' => $dto->notes,
         ];
 
-        $itemsData = array_map(fn ($item) => $item->toArray(), $dto->items);
+        $itemsData = array_map(
+            fn ($item) => $item instanceof OrderItemDTO ? $item->toArray() : (array) $item,
+            $dto->items
+        );
 
         $order = $this->orderRepository->createWithItems($orderData, $itemsData);
 
@@ -113,7 +116,9 @@ class OrderService
             'notes' => $dto->notes,
         ], fn ($val) => $val !== null);
 
-        $itemsData = $dto->items !== null ? array_map(fn ($item) => $item->toArray(), $dto->items) : null;
+        $itemsData = $dto->items !== null
+            ? array_map(fn ($item) => $item instanceof OrderItemDTO ? $item->toArray() : (array) $item, $dto->items)
+            : null;
 
         // 2. Persist to database
         $updatedOrder = $this->orderRepository->update($order, $orderData, $itemsData);
